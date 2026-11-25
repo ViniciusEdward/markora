@@ -11,6 +11,64 @@ const menu = document.querySelector('#menu-principal');
 const backTop = document.querySelector('.back-top');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+// Apresenta os detalhes sob demanda nas telas estreitas.
+const compactViewport = window.matchMedia('(max-width: 599.98px)');
+const selectedDisclosures = new Map();
+const mobileDisclosures = [...document.querySelectorAll('[data-mobile-disclosure]')].map((panel) => {
+  const heading = document.getElementById(panel.dataset.disclosureHeading);
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = heading ? 'mobile-disclosure mobile-disclosure-heading' : 'mobile-disclosure';
+  button.textContent = heading ? heading.textContent.trim() : panel.dataset.mobileDisclosure;
+  button.setAttribute('aria-controls', panel.id);
+
+  let desktopLabel;
+  if (heading) {
+    desktopLabel = document.createElement('span');
+    desktopLabel.append(...heading.childNodes);
+    heading.append(desktopLabel, button);
+  } else {
+    panel.before(button);
+  }
+
+  let expanded = false;
+  function render() {
+    const compact = compactViewport.matches;
+    button.hidden = !compact;
+    if (desktopLabel) desktopLabel.hidden = compact;
+    button.setAttribute('aria-expanded', String(compact && expanded));
+    panel.hidden = compact && !expanded;
+  }
+  function close() {
+    expanded = false;
+    render();
+  }
+
+  button.addEventListener('click', () => {
+    expanded = !expanded;
+    const group = panel.dataset.disclosureGroup;
+    if (expanded && group) {
+      selectedDisclosures.get(group)?.();
+      selectedDisclosures.set(group, close);
+    } else if (group) {
+      selectedDisclosures.delete(group);
+    }
+    if (expanded) {
+      panel.classList.remove('reveal-pending');
+      panel.querySelectorAll('.reveal-pending').forEach((item) => item.classList.remove('reveal-pending'));
+    }
+    render();
+  });
+  return render;
+});
+
+function updateMobileDisclosures() {
+  document.documentElement.classList.toggle('mobile-disclosures', compactViewport.matches && mobileDisclosures.length > 0);
+  mobileDisclosures.forEach((render) => render());
+}
+compactViewport.addEventListener('change', updateMobileDisclosures);
+updateMobileDisclosures();
+
 // A marca atual tem os arquivos anteriores como fallback de imagem.
 document.querySelectorAll('[data-brand]').forEach((brand) => {
   const img = brand.querySelector('img');
