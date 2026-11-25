@@ -295,7 +295,7 @@ h1 { font-weight: 700; }
 }
 
 @media (max-width: 599.98px) {
-  .section { padding-block: 56px; }
+  .section { padding-block: 42px; }
   .hero-copy .lead { font-size: 1rem; }
   .footer-top { gap: 16px; }
 }
@@ -410,4 +410,53 @@ h1 { font-weight: 700; }
   .hero-visual .floating .icon-badge { width: 32px; height: 32px; }
   .hero-visual .floating .icon { width: 20px; height: 20px; }
   .hero-strip { margin-top: 12px; padding-block: 14px 20px; border-top: 0; }
+
+  /* Cabeçalho, listas e cartões no celular. */
+  html { scroll-padding-top: 74px; text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+  .site-header .header-inner { min-height: 62px; }
+  .site-header .brand { min-height: 54px; }
+  .site-header .brand img { height: 50px; }
+  main > .section h2 { font-size: clamp(1.4rem, 6.4vw, 1.72rem); }
+  .section-intro { margin-bottom: 23px; }
+  .section-intro h2, .difference h2, .contact-copy h2, .statement h2 { margin-bottom: 12px; }
+  .section .eyebrow { margin-bottom: 10px; }
+  .section .icon-badge { width: 38px; height: 38px; }
+  .section .icon-badge .icon { width: 21px; height: 21px; }
+  .principles, .services-grid { gap: 13px; }
+  .card { padding: 18px; border-radius: 16px; }
+  .card h3 { margin: 12px 0 7px; }
+  .card p { line-height: 1.55; }
+  .service h3 { min-height: 0; }
+
+  .audience-grid { gap: 16px; }
+  .audience-panel { padding: 13px 0 2px; }
+  .panel-heading { gap: 10px; margin-bottom: 11px; }
+  .panel-heading h3 { font-size: 1rem; }
+  .audience-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 14px;
+  }
+  .audience-list li {
+    position: relative;
+    min-width: 0;
+    padding-inline-start: 13px;
+    font-size: .9375rem;
+    line-height: 1.4;
+  }
+  .audience-list li::before { position: absolute; inset-inline-start: 0; margin: 0; }
+  .audience-list li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+  .check-list li { padding-block: 11px; gap: 10px; }
+  .timeline { margin-top: 24px; }
+  .timeline li { min-height: 0; padding: 0 0 20px 49px; }
+  .timeline li:last-child { padding-bottom: 0; }
+  .timeline li:not(:last-child)::before { left: 18px; top: 40px; }
+  .step-number { width: 37px; height: 37px; font-size: .85rem; }
+  .timeline h3 { margin-bottom: 7px; }
+  .results-grid li { padding-block: 13px; gap: 11px; align-items: flex-start; }
+
+  .contact-grid { gap: 24px; }
+  .contact-details { margin-block: 20px; padding-block: 14px; }
+  .contact-form { padding: 16px; border-radius: 18px; }
 }
