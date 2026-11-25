@@ -11,17 +11,26 @@ const menu = document.querySelector('#menu-principal');
 const backTop = document.querySelector('.back-top');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-// Logos: a tipografia de fallback aparece até a imagem oficial estar disponível.
+// A marca atual tem os arquivos anteriores como fallback de imagem.
 document.querySelectorAll('[data-brand]').forEach((brand) => {
   const img = brand.querySelector('img');
-  const update = () => {
-    const loaded = img.complete && img.naturalWidth > 0;
-    brand.classList.toggle('loaded', loaded);
-    img.hidden = !loaded;
+  const markLoaded = () => brand.classList.add('loaded');
+  const handleError = () => {
+    const fallback = img.dataset.fallbackSrc;
+    if (fallback) {
+      delete img.dataset.fallbackSrc;
+      img.src = fallback;
+      return;
+    }
+    img.hidden = true;
   };
-  img.addEventListener('load', update);
-  img.addEventListener('error', update);
-  update();
+
+  img.addEventListener('load', markLoaded);
+  img.addEventListener('error', handleError);
+  if (img.complete) {
+    if (img.naturalWidth > 0) markLoaded();
+    else handleError();
+  }
 });
 
 // Menu móvel acessível: Escape, links, clique externo e mudança de largura.
