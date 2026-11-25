@@ -342,14 +342,14 @@ h1 { font-weight: 700; }
   background: var(--azul-claro);
   pointer-events: none;
 }
-#menu-principal[data-pill-motion]::before {
-  transition: left .42s ease, right .3s ease-out, top .3s ease-out, height .3s ease-out;
-}
-#menu-principal[data-pill-motion][data-pill-direction='left']::before {
-  transition-duration: .3s, .42s, .3s, .3s;
-}
 .button:active { transform: translateY(0); box-shadow: none; }
 
 @media (min-width: 1120px) {
   .js #menu-principal, .js #menu-principal.open, #menu-principal { gap: 5px; }
+  #menu-principal[data-pill-motion]::before {
+    transition: left .42s ease, right .3s ease-out, top .3s ease-out, height .3s ease-out;
+  }
+  #menu-principal[data-pill-motion][data-pill-direction='left']::before {
+    transition-duration: .3s, .42s, .3s, .3s;
+  }
 }
