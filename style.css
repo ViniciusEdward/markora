@@ -460,3 +460,61 @@ h1 { font-weight: 700; }
   .contact-details { margin-block: 20px; padding-block: 14px; }
   .contact-form { padding: 16px; border-radius: 18px; }
 }
+
+/* Leitura sob demanda nos celulares. */
+@media (max-width: 599.98px) {
+  .mobile-disclosure {
+    display: flex;
+    width: 100%;
+    min-height: 46px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 14px;
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    background: var(--branco);
+    color: var(--azul-escuro);
+    font-weight: 700;
+    line-height: 1.35;
+    text-align: start;
+  }
+  .mobile-disclosure::after {
+    content: '';
+    flex: 0 0 auto;
+    width: 7px;
+    height: 7px;
+    margin-inline-end: 3px;
+    border-inline-end: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+  }
+  .mobile-disclosure[aria-expanded='true']::after { transform: rotate(225deg) translateY(-2px); }
+  .mobile-disclosure-heading { border: 0; padding-inline: 0 3px; background: transparent; }
+
+  .mobile-disclosures .hero-grid { gap: 18px; }
+  .mobile-disclosures .hero { padding-bottom: 24px; }
+  .mobile-disclosures .hero:has(.hero-visual[hidden]) .hero-strip { display: none; }
+  .mobile-disclosures .principles { margin-top: 14px; }
+  .mobile-disclosures .audience-panel { padding-top: 5px; }
+  .mobile-disclosures .audience-grid { gap: 10px; }
+  .mobile-disclosures .panel-heading { margin-bottom: 0; }
+  .mobile-disclosures .panel-heading h3 { flex: 1; min-width: 0; }
+  .mobile-disclosures .audience-list { margin-top: 8px; }
+
+  .mobile-disclosures .services-grid { gap: 8px; }
+  .mobile-disclosures .service {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    column-gap: 10px;
+    align-items: start;
+    padding: 5px 12px;
+    border-radius: 12px;
+  }
+  .mobile-disclosures .service > .icon-badge { width: 32px; height: 32px; margin-top: 7px; }
+  .mobile-disclosures .service h3 { margin: 0; font-size: 1rem; }
+  .mobile-disclosures .service p { grid-column: 2; padding-block: 1px 9px; }
+  .mobile-disclosures .difference .container { gap: 14px; }
+  .mobile-disclosures .difference p:last-child { margin-bottom: 0; }
+  .mobile-disclosures .timeline, .mobile-disclosures .results-grid { margin-top: 14px; }
+}
