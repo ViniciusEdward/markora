@@ -45,10 +45,12 @@ menuButton.addEventListener('click', () => {
   menu.classList.toggle('open', open);
   menuButton.setAttribute('aria-expanded', String(open));
   menuButton.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  if (open) syncMenuPill();
 });
 menu.addEventListener('click', (event) => {
   const link = event.target.closest('a');
   if (!link) return;
+  selectNavDestination(link.hash.slice(1));
   const mobileOpen = menu.classList.contains('open');
   closeMenu();
   if (mobileOpen) {
@@ -79,15 +81,44 @@ updateScrollState();
 // Navegação ativa: cada grupo inclui as seções complementares até a próxima âncora.
 const navLinks = [...menu.querySelectorAll('a:not(.nav-cta)')];
 const sections = [...document.querySelectorAll('main > section')];
+let navDestination = '';
+let navSettleTimer;
+
+function syncMenuPill() {
+  const link = navLinks.find((item) => item.classList.contains('active'));
+  if (!link || !menu.clientWidth) return;
+
+  const left = link.offsetLeft;
+  const previous = parseFloat(menu.style.getPropertyValue('--pill-left'));
+  if (left !== previous) menu.dataset.pillDirection = left < previous ? 'left' : 'right';
+  menu.style.setProperty('--pill-left', `${left}px`);
+  menu.style.setProperty('--pill-right', `${menu.clientWidth - left - link.offsetWidth}px`);
+  menu.style.setProperty('--pill-top', `${link.offsetTop}px`);
+  menu.style.setProperty('--pill-height', `${link.offsetHeight}px`);
+  menu.dataset.pillReady = '';
+}
+
 function markActive(id) {
   navLinks.forEach((link) => {
-    const active = link.getAttribute('href') === `#${id}`;
+    const active = link.hash.slice(1) === id;
     link.classList.toggle('active', active);
     if (active) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
   });
+  syncMenuPill();
 }
+
+function selectNavDestination(id) {
+  navDestination = id;
+  window.clearTimeout(navSettleTimer);
+  navSettleTimer = window.setTimeout(() => { navDestination = ''; }, 900);
+  markActive(id);
+}
+
 markActive('inicio');
+window.requestAnimationFrame(() => { menu.dataset.pillMotion = ''; });
+if ('ResizeObserver' in window) new ResizeObserver(syncMenuPill).observe(menu);
+else window.addEventListener('resize', syncMenuPill, { passive: true });
 if ('IntersectionObserver' in window) {
   let group = 'inicio';
   const sectionGroups = new Map();
@@ -97,7 +128,8 @@ if ('IntersectionObserver' in window) {
   });
   const activeObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) markActive(sectionGroups.get(entry.target));
+      const id = sectionGroups.get(entry.target);
+      if (entry.isIntersecting && (!navDestination || navDestination === id)) markActive(id);
     });
   }, { rootMargin: '-18% 0px -65% 0px', threshold: 0 });
   sections.forEach((section) => activeObserver.observe(section));
@@ -124,7 +156,6 @@ if ('IntersectionObserver' in window) {
     });
   }
 }
-navLinks.forEach((link) => link.addEventListener('click', () => markActive(link.hash.slice(1))));
 
 // Formulário de contato: prepara um e-mail no aplicativo do visitante.
 const form = document.querySelector('#contact-form');
